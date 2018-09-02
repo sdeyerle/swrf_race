@@ -4,10 +4,10 @@ from openpyxl import Workbook, load_workbook
 import openpyxl.utils as xlutils
 import sqlite3
 
-def init_db(filename):
-  conn = sqlite3.connect(filename)
+def init_db(db_file, schema_file):
+  conn = sqlite3.connect(db_file)
 
-  with open('swrf_schema.sql') as f:
+  with open(schema_file) as f:
     conn.cursor().executescript(f.read())
 
   conn.commit()
@@ -149,10 +149,12 @@ def decode_format_c(ws, curr_row, db_curs, last_race_col):
 parser = argparse.ArgumentParser(description='Parse SWRF spreadsheet to SQLite database.')
 parser.add_argument('xlsx', type=str,
                     help='xlsx file')
+parser.add_argument('schema', type=str,
+                    help='schema sql file')
 
 args = parser.parse_args()
 
-db_conn = init_db('swrf.db')
+db_conn = init_db('swrf.db', args.schema)
 db_curs = db_conn.cursor()
 
 wb = load_workbook(args.xlsx)
@@ -208,8 +210,4 @@ while(True):
     break
 
 db_conn.commit()
-
-
-
-
 
