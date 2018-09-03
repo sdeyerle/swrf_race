@@ -51,7 +51,7 @@ create table courses_mark ( courseid integer,
                             foreign key (courseid) references course(courseid),
                             foreign key (markid) references mark(markid) );
 
-create table race_result ( raceid integer not null,
+create table race_entry  ( raceid integer not null,
                            boatid integer not null,
                            result TEXT, -- TODO: enum
                            start_time text,
